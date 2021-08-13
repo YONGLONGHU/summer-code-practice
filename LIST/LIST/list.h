@@ -15,8 +15,10 @@ void listshow(list pst);
 listnode * buynode(elemtype v);
 void listpushfront(list * pst);
 void listpushhead(list * pst);
-
-
+void listpopback(list * pst);
+void listpopfront(list * pst);
+size_t listlen(list * pst);
+listnode * findlist(list * pst, elemtype v);
 
 
 
@@ -45,6 +47,89 @@ listnode * buynode(elemtype v)//向空间申请一个结点并赋值返回地址
 	return s;
 }
 
+void listpushback(list * pst, elemtype v)//尾插法
+{
+	listnode * s = buynode(v);
+	listnode * p = *pst;
+	if (p == NULL)
+	{
+		*pst = s;
+		return;
+	}
+	while (p != NULL)
+	{
+		p = p->next;
+	}
+	p->next = s;
+}
+void listpushfront(list * pst, elemtype v)
+{
+	listnode * s = buynode(v);
+	if (*pst == NULL)
+	{
+		*pst = s; 
+		return;
+	}
+	s->next = *pst;
+	*pst = s;
+}
+void listpopback(list * pst)
+{
+	if (*pst == NULL)
+		return;
+	else if ((*pst)->next == NULL)
+	{
+		free(*pst);
+		*pst == NULL;
+	}
+	else
+	{
+		listnode * p = *pst;
+		listnode *prev = NULL;
+		while (p->next != NULL)
+		{
+			prev = p;
+			p = p->next;
+		}
+		free(p);
+		prev->next = NULL;
+	}
+}
+
+void listpopfront(list * pst)
+{
+	if (pst == NULL)
+		return;
+	else if ((*pst)->next == NULL)
+	{
+		free(pst);
+		*pst == NULL;
+	}
+	else
+	{
+		free(*pst);
+		*pst = (*pst)->next;
+	}
+}
+size_t listlen(list * pst)
+{
+	listnode * p = * pst;
+	int len = 0;
+	while (p!=NULL)
+	{
+		len++;
+		p = p->next;
+	}
+	return len;
+}
+
+listnode * findlist(list * pst, elemtype v)
+{
+	listnode * p = *pst;
+	if (p != NULL&&p->date != v)
+		p = p->next;
+	return p;
+}
 ///////////////////////////////////////////
 //建立链表
 void greatlisttail(list * pst)//尾插法
